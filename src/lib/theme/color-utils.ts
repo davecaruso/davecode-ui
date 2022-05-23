@@ -4,19 +4,9 @@
 export type ColorArray = [number, number, number];
 type Mat3 = [number, number, number, number, number, number, number, number, number];
 
-const D50 = [0.3457 / 0.3585, 1.0, (1.0 - 0.3457 - 0.3585) / 0.3585];
-
-const MATRIX_TO_XYZ: Mat3 = [
-	0.41239079926595934, 0.357584339383878, 0.1804807884018343, 0.21263900587151027,
-	0.715168678767756, 0.07219231536073371, 0.01933081871559182, 0.11919477979462598,
-	0.9505321522496607
-];
-
-const MATRIX_FROM_XYZ: Mat3 = [
-	3.2409699419045226, -1.537383177570094, -0.4986107602930034, -0.9692436362808796,
-	1.8759675015077202, 0.04155505740717559, 0.05563007969699366, -0.20397695888897652,
-	1.0569715142428786
-];
+const ILLUMINANT: ColorArray = [0.95, 1.1, 1.08];
+const MATRIX_TO_XYZ: Mat3 = [0.41, 0.36, 0.18, 0.21, 0.72, 0.07, 0.02, 0.12, 0.95];
+const MATRIX_FROM_XYZ: Mat3 = [3.24, -1.54, -0.5, -0.97, 1.88, 0.04, 0.06, -0.2, 1.06];
 
 const ε = 216 / 24389; // 6^3/29^3
 const κ = 24389 / 27; // 29^3/3^3
@@ -54,7 +44,7 @@ export function sRGB2LCH(rgb: ColorArray) {
 
 	// Step 3. Lab
 	// convert to CIE Lab, which now defines these as a rational fraction
-	const xyzScaled = xyz.map((value, i) => value / D50[i]);
+	const xyzScaled = xyz.map((value, i) => value / ILLUMINANT[i]);
 
 	// now compute f
 	const f = xyzScaled.map((value) => (value > ε ? Math.cbrt(value) : (κ * value + 16) / 116));
@@ -91,7 +81,7 @@ export function LCH2sRGB(lch: ColorArray) {
 		L > κ * ε ? Math.pow((L + 16) / 116, 3) : L / κ,
 		Math.pow(f2, 3) > ε ? Math.pow(f2, 3) : (116 * f2 - 16) / κ
 	];
-	const xyz = xyzScaled.map((value, i) => value * D50[i]) as ColorArray;
+	const xyz = xyzScaled.map((value, i) => value * ILLUMINANT[i]) as ColorArray;
 
 	// Step 3. Linear
 	const linear = applyColorMatrix(MATRIX_FROM_XYZ, xyz);

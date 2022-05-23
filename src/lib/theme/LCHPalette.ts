@@ -3,7 +3,7 @@ import { LCH2sRGB, parseHex, makeHex, sRGB2LCH, type ColorArray } from './color-
 export class LCHPalette {
 	#hue: number;
 	#chroma: number;
-	#cache = new Map<number, string>();
+	#cache = new Map<number, ColorArray>();
 	initialLightness?: number;
 
 	constructor(hue: number, chroma: number, initialLightness?: number) {
@@ -39,14 +39,35 @@ export class LCHPalette {
 		this.#cache.clear();
 	}
 
-	atLightness(lightness: number) {
+	colorAt(lightness: number): ColorArray {
 		if (!this.#cache.has(lightness)) {
 			this.#cache.set(lightness, this.calculate(lightness));
 		}
-		return this.#cache.get(lightness);
+		return this.#cache.get(lightness)!;
+	}
+
+	colorOn(lightness: number) {
+		return this.colorAt(
+			lightness +
+				(lightness > 50 //
+					? lightness > 80
+						? -65
+						: -60
+					: lightness < 20
+					? 65
+					: 60)
+		);
+	}
+
+	hexAt(lightness: number) {
+		return makeHex(this.colorAt(lightness));
+	}
+
+	hexOn(lightness: number) {
+		return makeHex(this.colorOn(lightness));
 	}
 
 	private calculate(lightness: number) {
-		return makeHex(LCH2sRGB([lightness, this.#chroma, this.#hue]));
+		return LCH2sRGB([lightness, this.#chroma, this.#hue]);
 	}
 }

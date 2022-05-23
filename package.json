@@ -1,5 +1,5 @@
 {
-  "name": "davecode-ui",
+  "name": "@davecode/ui",
   "version": "0.0.1",
   "scripts": {
     "dev": "svelte-kit dev",
@@ -33,6 +33,7 @@
   },
   "type": "module",
   "dependencies": {
-    "color": "^4.2.3"
+    "color": "^4.2.3",
+    "node-sass": "^7.0.1"
   }
 }
