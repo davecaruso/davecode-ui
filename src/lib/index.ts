@@ -1,6 +1,7 @@
 // Components
 export { default as Button } from './components/Button.svelte';
 export { default as TextBox } from './components/TextBox.svelte';
+export { default as Radio } from './components/Radio.svelte';
 
 // Hooks
 export { useId } from './hooks/useId';
