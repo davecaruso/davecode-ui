@@ -4,7 +4,7 @@
 export type ColorArray = [number, number, number];
 type Mat3 = [number, number, number, number, number, number, number, number, number];
 
-const ILLUMINANT: ColorArray = [0.95, 1.1, 1.08];
+const ILLUMINANT: ColorArray = [0.95, 1.05, 1.08];
 const MATRIX_TO_XYZ: Mat3 = [0.41, 0.36, 0.18, 0.21, 0.72, 0.07, 0.02, 0.12, 0.95];
 const MATRIX_FROM_XYZ: Mat3 = [3.24, -1.54, -0.5, -0.97, 1.88, 0.04, 0.06, -0.2, 1.06];
 
